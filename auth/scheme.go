@@ -6,7 +6,6 @@ package auth
 
 import (
 	"context"
-
 	"github.com/pkg/errors"
 	authTypes "github.com/tsuru/tsuru/types/auth"
 )
@@ -27,6 +26,7 @@ type UserScheme interface {
 	Logout(ctx context.Context, token string) error
 	Create(ctx context.Context, user *User) (*User, error)
 	Remove(ctx context.Context, user *User) error
+	WebLogin(ctx context.Context, email string, token string) error
 }
 
 type ManagedScheme interface {

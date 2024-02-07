@@ -350,6 +350,7 @@ func RunServer(dry bool) http.Handler {
 	m.Add("1.0", http.MethodGet, "/auth/scheme", Handler(authScheme))
 	m.Add("1.18", http.MethodGet, "/auth/schemes", Handler(authSchemes))
 	m.Add("1.0", http.MethodPost, "/auth/login", Handler(login))
+	m.Add("1.0", http.MethodPost, "/auth/webLogin", Handler(webLogin))
 
 	m.Add("1.0", http.MethodPost, "/users/{email}/password", Handler(resetPassword))
 	m.Add("1.0", http.MethodPost, "/users/{email}/tokens", Handler(login))

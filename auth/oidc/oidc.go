@@ -60,6 +60,11 @@ type oidcScheme struct {
 	groupsInClaims      bool
 }
 
+func (s *oidcScheme) WebLogin(_ context.Context, _ string, _ string) error {
+	//	TODO
+	return nil
+}
+
 func (s *oidcScheme) Auth(ctx context.Context, token string) (auth.Token, error) {
 	err := s.lazyInitialize(ctx)
 	if err != nil {

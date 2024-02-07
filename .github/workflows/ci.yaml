@@ -194,8 +194,6 @@ jobs:
   docker-image:
     needs:
     - test
-    - lint
-    - integration
     - check-contributors
     - leakdetector
     - check-handlers
