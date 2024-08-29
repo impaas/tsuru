@@ -216,7 +216,7 @@ func (s *oAuthScheme) Info(ctx context.Context) (*authTypes.SchemeInfo, error) {
 }
 
 type userData struct {
-	Email  string   `json:"email"`
+	Email  string   `json:"userPrincipalName"`
 	Groups []string `json:"groups"`
 }
 

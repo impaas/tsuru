@@ -178,6 +178,9 @@ jobs:
     - govulncheck
     runs-on: ubuntu-latest
     if: github.event_name != 'pull_request'
+    permissions:
+      contents: read
+      packages: write
     steps:
     - uses: actions/checkout@v2
     - name: Set up Docker Buildx
@@ -192,7 +195,7 @@ jobs:
     - uses: Surgo/docker-smart-tag-action@v1
       id: smarttag
       with:
-        docker_image: tsuru/api
+        docker_image: ghcr.io/impaas/tsuru-api
         default_branch: main
         tag_with_sha: 'true'
     - name: Get version from tag
@@ -202,8 +205,9 @@ jobs:
         commit-ish: HEAD
     - uses: docker/login-action@v1
       with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+        registry: ghcr.io
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.GITHUB_TOKEN }}
     - uses: docker/build-push-action@v2
       with:
         context: .
@@ -227,20 +231,20 @@ jobs:
         args: release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  publish-openapi-specs:
-    if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
-    needs: [validate-api-spec]
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/setup-node@v3
-    - name: Install SwaggerHub CLI
-      run: |-
-        npm install -g swaggerhub-cli@0.6.4
-        swaggerhub version
-    - name: yq - portable yaml processor
-      uses: mikefarah/yq@v4.30.6
-    - uses: actions/checkout@v3
-    - name: Update OpenAPI specs on SwaggerHub
-      run: ./misc/swaggerhub-update-api-specs.sh
-      env:
-        SWAGGERHUB_API_KEY: ${{ secrets.SWAGGERHUB_API_KEY }}
+  # publish-openapi-specs:
+  #   if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+  #   needs: [validate-api-spec]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/setup-node@v3
+  #   - name: Install SwaggerHub CLI
+  #     run: |-
+  #       npm install -g swaggerhub-cli@0.6.4
+  #       swaggerhub version
+  #   - name: yq - portable yaml processor
+  #     uses: mikefarah/yq@v4.30.6
+  #   - uses: actions/checkout@v3
+  #   - name: Update OpenAPI specs on SwaggerHub
+  #     run: ./misc/swaggerhub-update-api-specs.sh
+  #     env:
+  #       SWAGGERHUB_API_KEY: ${{ secrets.SWAGGERHUB_API_KEY }}

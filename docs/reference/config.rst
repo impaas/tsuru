@@ -360,7 +360,7 @@ auth:oauth:info-url
 +++++++++++++++++++
 
 The URL used to fetch information about the authenticated user. tsuru expects a
-json response containing a field called ``email``.
+json response containing a field called ``userPrincipalName``.
 
 tsuru will also make call this URL on every request to the API to make sure the
 token is still valid and hasn't been revoked.
